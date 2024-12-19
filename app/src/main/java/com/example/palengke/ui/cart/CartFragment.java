@@ -1,38 +1,70 @@
 package com.example.palengke.ui.cart;
 
-import androidx.lifecycle.ViewModelProvider;
-
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.palengke.R;
+import com.example.palengke.databinding.FragmentCartBinding;
 
 public class CartFragment extends Fragment {
 
-    private CartViewModel mViewModel;
-
-    public static CartFragment newInstance() {
-        return new CartFragment();
-    }
+    private FragmentCartBinding binding;
+    private CartAdapter cartAdapter;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_cart, container, false);
+        // Correctly initialize binding
+        binding = FragmentCartBinding.inflate(inflater, container, false);
+        View root = binding.getRoot();
+
+        // Initialize RecyclerView and Adapter
+        RecyclerView recyclerView = binding.recyclerView;
+        cartAdapter = new CartAdapter();
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setAdapter(cartAdapter);
+
+        // Set default product data
+        int[] productImage = {
+                R.drawable.banana_img,
+                R.drawable.cabbage_img,
+                R.drawable.eggs_img
+        };
+
+        String[] productName = {
+                "Banana",
+                "Cabbage",
+                "Eggs"
+        };
+
+        String[] productPrice = {
+                "₱50",
+                "₱75",
+                "₱210"
+        };
+
+        String[] productQuantity = {
+                "Qty: 2 V",
+                "Qty: 546 V",
+                "Qty: 456 V"
+        };
+
+        cartAdapter.setProductData(productImage, productName, productPrice, productQuantity);
+
+        return root;
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        mViewModel = new ViewModelProvider(this).get(CartViewModel.class);
-        // TODO: Use the ViewModel
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null; // Clean up binding reference
     }
-
 }

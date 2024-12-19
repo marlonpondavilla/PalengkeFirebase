@@ -1,38 +1,59 @@
 package com.example.palengke.ui.deals;
 
 import androidx.lifecycle.ViewModelProvider;
-
 import android.os.Bundle;
-
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.palengke.R;
+import com.example.palengke.databinding.FragmentDealsBinding;
 
 public class DealsFragment extends Fragment {
 
-    private DealsViewModel mViewModel;
+    private FragmentDealsBinding binding;
+    private DealsAdapter dealsAdapter;
 
-    public static DealsFragment newInstance() {
-        return new DealsFragment();
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        binding = FragmentDealsBinding.inflate(inflater, container, false);
+        View root = binding.getRoot();
+
+        DealsViewModel dealsViewModel =
+                new ViewModelProvider(this).get(DealsViewModel.class);
+
+        RecyclerView recyclerView = binding.recyclerView;
+        dealsAdapter = new DealsAdapter();
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setAdapter(dealsAdapter);
+
+        // Observing the data from the ViewModel
+        dealsViewModel.getProductTitles().observe(getViewLifecycleOwner(), titles -> {
+            String[] prices = dealsViewModel.getProductPrices().getValue();
+            Integer[] images = dealsViewModel.getProductImages().getValue();
+            String[] quantities = dealsViewModel.getProductQuantities().getValue();
+            dealsAdapter.setProductData(titles, prices, images, quantities);
+        });
+
+        // Sample data for products
+        String[] productTitles = {"Nike Shoes", "Rolex Watch", "Banana", "Shein"};
+        String[] productPrices = {"P120", "P5000", "P30", "P3490"};
+        String[] quantities = {"1", "2", "3", "4"};
+        Integer[] productImages = {R.drawable.nike_brand, R.drawable.rolex_brand, R.drawable.banana_img, R.drawable.shein_brand};
+
+        // Set data to ViewModel
+        dealsViewModel.setProductData(productTitles, productPrices, productImages, quantities);
+
+        return root;
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_deals, container, false);
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        mViewModel = new ViewModelProvider(this).get(DealsViewModel.class);
-        // TODO: Use the ViewModel
-    }
-
 }

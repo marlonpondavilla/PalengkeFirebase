@@ -76,7 +76,9 @@
                 android:text="Buy Now"
                 android:layout_margin="5dp"
                 android:textAllCaps="false"
-                android:background="@drawable/buynow_button"/>
+                android:fontFamily="@font/montserrat_alternates_bold"
+                android:background="@drawable/buynow_button"
+                android:textColor="@color/white"/>
 
         </LinearLayout>
 
