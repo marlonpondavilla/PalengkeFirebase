@@ -1,7 +1,38 @@
 package com.example.palengke.ui.cart;
 
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 public class CartViewModel extends ViewModel {
-    // TODO: Implement the ViewModel
+
+    private MutableLiveData<Integer[]> productImage = new MutableLiveData<>();
+    private MutableLiveData<String[]> productName = new MutableLiveData<>();
+    private MutableLiveData<String[]> productPrice = new MutableLiveData<>();
+    private MutableLiveData<String[]> productQuantity = new MutableLiveData<>();
+
+    // Getter methods for LiveData
+    public LiveData<Integer[]> getProductImage() {
+        return productImage;
+    }
+
+    public LiveData<String[]> getProductName() {
+        return productName;
+    }
+
+    public LiveData<String[]> getProductPrice() {
+        return productPrice;
+    }
+
+    public LiveData<String[]> getProductQuantity() {
+        return productQuantity;
+    }
+
+    // Method to set data
+    public void setProductData(Integer[] image, String[] name, String[] price, String[] quantity) {
+        productImage.setValue(image);
+        productName.setValue(name);
+        productPrice.setValue(price);
+        productQuantity.setValue(quantity);
+    }
 }
