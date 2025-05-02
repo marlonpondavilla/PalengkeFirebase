@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:background="@drawable/bg_img"
+    android:layout_height="match_parent"
+    tools:context=".Login">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="540dp"
+        android:layout_centerVertical="true"
+        android:background="@drawable/login_border"
+        android:layout_marginHorizontal="24dp">
+
+        <ImageView
+            android:id="@+id/loginTitle"
+            android:layout_width="110dp"
+            android:layout_height="100dp"
+            android:layout_marginVertical="20dp"
+            android:layout_centerHorizontal="true"
+            android:background="@color/white"
+            android:src="@drawable/logo"/>
+
+        <EditText
+            android:id="@+id/usernameInput"
+            android:layout_width="240dp"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/loginTitle"
+            android:background="@drawable/edit_text_border"
+            android:hint="Enter username/email" />
+
+        <EditText
+            android:id="@+id/passwordInput"
+            android:layout_width="240dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_below="@+id/usernameInput"
+            android:layout_centerHorizontal="true"
+            android:inputType="textPassword"
+            android:background="@drawable/edit_text_border"
+            android:hint="Enter password"/>
+
+        <Button
+            android:id="@+id/loginBtn"
+            android:layout_width="240dp"
+            android:layout_height="52dp"
+            android:layout_marginTop="24dp"
+            android:layout_centerHorizontal="true"
+            android:backgroundTint="#344CB7"
+            android:textSize="14dp"
+            android:text="Login"
+            android:layout_below="@+id/passwordInput"/>
+
+        <Button
+            android:id="@+id/signupBtn"
+            android:layout_width="240dp"
+            android:layout_height="52dp"
+            android:layout_centerHorizontal="true"
+            android:backgroundTint="#3E7B27"
+            android:textSize="14dp"
+            android:text="Sign Up"
+            android:layout_below="@+id/loginBtn"/>
+
+        <ImageView
+            android:id="@+id/googleProvider"
+            android:layout_width="match_parent"
+            android:layout_height="90dp"
+            android:src="@drawable/google_img"
+            android:layout_below="@+id/signupBtn"
+            android:gravity="center"/>
+    </RelativeLayout>
+
+</RelativeLayout>

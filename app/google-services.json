@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "678314367394",
+    "project_id": "palengke-717c0",
+    "storage_bucket": "palengke-717c0.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:678314367394:android:efdc5a1293ac02bedffafb",
+        "android_client_info": {
+          "package_name": "com.example.palengke"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "678314367394-4iqe6pt9e6hme93tlmrkjq9iejn44b9a.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.palengke",
+            "certificate_hash": "1a25de49795be159d4a7f9839ac1c55bc3f78b59"
+          }
+        },
+        {
+          "client_id": "678314367394-2863ftrap4t3dp12fnmd828btamsbh4r.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAWXTy5WV4qxciyB-4X7nKEPvbQVmEtcms"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "678314367394-2863ftrap4t3dp12fnmd828btamsbh4r.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
