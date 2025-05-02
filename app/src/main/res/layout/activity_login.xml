@@ -31,7 +31,9 @@
             android:layout_centerHorizontal="true"
             android:layout_below="@id/loginTitle"
             android:background="@drawable/edit_text_border"
-            android:hint="Enter username/email" />
+            android:textColor="#F7F7F7"
+            android:textColorHint="#AAAAAA"
+            android:hint="example@test.com" />
 
         <EditText
             android:id="@+id/passwordInput"
@@ -42,7 +44,10 @@
             android:layout_centerHorizontal="true"
             android:inputType="textPassword"
             android:background="@drawable/edit_text_border"
-            android:hint="Enter password"/>
+            android:textColor="#F7F7F7"
+            android:textColorHint="#AAAAAA"
+            android:hint="Enter password" />
+
 
         <Button
             android:id="@+id/loginBtn"

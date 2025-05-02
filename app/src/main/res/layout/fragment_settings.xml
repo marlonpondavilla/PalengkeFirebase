@@ -4,97 +4,121 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.settings.SettingsFragment">
+    tools:context=".ui.settings.SettingsFragment"
+    android:background="@color/white">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="16dp"
-        android:gravity="center_horizontal">
-
-        <!-- ConstraintLayout containing ImageView -->
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/black">
-
-            <ImageView
-                android:id="@+id/userImage"
-                android:layout_width="wrap_content"
-                android:layout_height="120dp"
-                android:layout_marginTop="15dp"
-                android:src="@drawable/user"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Hello,  User"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="20dp"
-            android:textStyle="bold"
-            android:textSize="24dp"/>
+        android:layout_height="match_parent">
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_gravity="center"
-            android:layout_marginBottom="20dp">
+            android:orientation="vertical"
+            android:padding="24dp"
+            android:gravity="center_horizontal"
+            android:background="@color/white">
 
-            <Button
-                android:id="@+id/completedOrdersButton"
-                android:layout_width="150dp"
+            <!-- Profile Image -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/userImage"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:layout_marginTop="16dp"
+                    android:src="@drawable/user"
+                    android:contentDescription="User profile image"
+                    android:scaleType="centerCrop"
+                    android:background="@drawable/circle_background"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <!-- Welcome Text -->
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Completed Orders"
-                android:backgroundTint="#8FD14F"
+                android:text="Hello, User"
+                android:textSize="22sp"
+                android:textStyle="bold"
                 android:textColor="@color/black"
-                android:padding="15dp"
-                android:textStyle="bold"
-                android:layout_marginRight="30dp"/>
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="20dp" />
 
-            <Button
-                android:id="@+id/cancelledOrdersButton"
-                android:layout_width="130dp"
-                android:padding="15dp"
-                android:backgroundTint="#C73659"
-                android:textStyle="bold"
+            <!-- Order Buttons -->
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Cancelled Orders"/>
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_marginBottom="24dp">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/completedOrdersButton"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="Completed Orders"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    app:cornerRadius="12dp"
+                    app:backgroundTint="#8FD14F"
+                    android:layout_marginEnd="8dp"
+                    android:elevation="4dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/cancelledOrdersButton"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="Cancelled Orders"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    app:cornerRadius="12dp"
+                    app:backgroundTint="#C73659"
+                    android:layout_marginStart="8dp"
+                    android:elevation="4dp" />
+            </LinearLayout>
+
+            <!-- Navigation Buttons -->
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="To ship"
+                app:cornerRadius="8dp"
+                android:layout_marginBottom="12dp"
+                android:elevation="2dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="To receive"
+                app:cornerRadius="8dp"
+                android:layout_marginBottom="12dp"
+                android:elevation="2dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Wallet"
+                app:cornerRadius="8dp"
+                android:layout_marginBottom="24dp"
+                android:elevation="2dp" />
+
+            <!-- Logout Button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/logoutBtn"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:text="Logout"
+                app:cornerRadius="16dp"
+                android:textColor="@color/white"
+                app:backgroundTint="@color/design_default_color_error"
+                android:elevation="4dp" />
         </LinearLayout>
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="12dp"
-            android:text="Profile"/>
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="12dp"
-            android:text="About"/>
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="12dp"
-            android:text="Contact"/>
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="80dp"
-            android:layout_marginTop="25dp"
-            android:padding="15dp"
-            android:text="Logout"/>
-
-    </LinearLayout>
-
-
-
+    </ScrollView>
 </FrameLayout>
