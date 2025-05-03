@@ -38,6 +38,7 @@
             android:orientation="horizontal"
             android:layout_gravity="center">
 
+            <!-- Product Price TextView -->
             <TextView
                 android:id="@+id/productPrize"
                 android:layout_width="150dp"
@@ -49,29 +50,53 @@
                 android:textColor="#090909"
                 android:layout_marginTop="10dp" />
 
-            <TextView
-                android:id="@+id/productQuantityLabel"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:paddingRight="10dp"
-                android:fontFamily="@font/montserrat_alternates_bold"
-                android:gravity="end"
-                android:text="Qty:"
-                android:textColor="#090909"
-                android:textSize="20dp" />
+<!--            &lt;!&ndash; Quantity Label &ndash;&gt;-->
+<!--            <TextView-->
+<!--                android:id="@+id/productQuantityLabel"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="10dp"-->
+<!--                android:paddingRight="10dp"-->
+<!--                android:fontFamily="@font/montserrat_alternates_bold"-->
+<!--                android:gravity="end"-->
+<!--                android:text="Qty:"-->
+<!--                android:textColor="#090909"-->
+<!--                android:textSize="20dp" />-->
 
+            <!-- Decrement Button (-) -->
+            <Button
+                android:id="@+id/minusButton"
+                android:layout_width="50dp"
+                android:layout_height="40dp"
+                android:text="-"
+                android:layout_marginTop="10dp"
+                android:textSize="20sp"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:background="@color/black" />
+
+            <!-- Quantity TextView -->
             <TextView
                 android:id="@+id/productQuantity"
-                android:layout_width="wrap_content"
+                android:layout_width="40dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/montserrat_alternates_bold"
-                android:gravity="end"
-                android:text="0"
+                android:gravity="center"
+                android:text="2"
                 android:textColor="#090909"
                 android:textSize="20dp" />
 
+            <!-- Increment Button (+) -->
+            <Button
+                android:id="@+id/plusButton"
+                android:layout_width="50dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/black"
+                android:text="+"
+                android:textSize="20sp" />
         </LinearLayout>
 
         <LinearLayout

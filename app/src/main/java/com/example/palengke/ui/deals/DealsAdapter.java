@@ -62,7 +62,7 @@ public class DealsAdapter extends RecyclerView.Adapter<DealsAdapter.DealsViewHol
             cartItem.put("name", productTitles[position]);
             cartItem.put("price", productPrices[position]);
             cartItem.put("quantity", productQuantity[position]);
-            cartItem.put("imageResId", productImages[position]);
+            cartItem.put("imageResId", productImages[position]);  // Storing drawable ID
 
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             if (user != null) {
@@ -70,12 +70,14 @@ public class DealsAdapter extends RecyclerView.Adapter<DealsAdapter.DealsViewHol
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
                 DatabaseReference cartRef = database.getReference("cart").child(userId);
 
-                // Generate a unique ID for the cart item
+                // Generate a unique ID for the cart item (same approach as HomeAdapter)
                 String cartItemId = cartRef.push().getKey();
 
                 if (cartItemId != null) {
+                    // Add the generated unique ID to the cart item
                     cartItem.put("id", cartItemId);
 
+                    // Add the cart item to Firebase with the unique ID
                     cartRef.child(cartItemId).setValue(cartItem)
                             .addOnSuccessListener(aVoid -> {
                                 Toast.makeText(v.getContext(), "Added to your cart", Toast.LENGTH_SHORT).show();
