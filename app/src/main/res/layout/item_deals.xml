@@ -5,13 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:layout_margin="0dp"
-    android:padding="10dp">
-
+    android:layout_margin="15dp"
+   >
     <!-- Second Card -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/card_two"
-        android:layout_width="320dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:background="#D9EAFD"
@@ -68,6 +67,7 @@
             android:fontFamily="@font/montserrat_alternates_medium"
             android:text="Quantity"
             android:textStyle="bold"
+            android:textColor="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.638"
             app:layout_constraintStart_toStartOf="parent"

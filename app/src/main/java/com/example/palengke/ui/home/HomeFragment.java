@@ -53,9 +53,9 @@ public class HomeFragment extends Fragment {
         };
 
         String[] productQuantity = {
-                "Qty: 2 V", "Qty: 3 V", "Qty: 68 V",
-                "Qty: 546 V", "Qty: 45 V", "Qty: 243 V",
-                "Qty: 456 V", "Qty: 21 V", "Qty: 987 V", "Qty: 545 V"
+                "Qty: 2", "Qty: 3", "Qty: 68",
+                "Qty: 546", "Qty: 45", "Qty: 243",
+                "Qty: 456", "Qty: 21", "Qty: 987", "Qty: 545"
         };
 
         homeAdapter.setProductData(productImage, productName, productPrice, productQuantity);

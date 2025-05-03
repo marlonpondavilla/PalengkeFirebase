@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -12,7 +13,18 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.palengke.R;
+import com.example.palengke.classes.CartItem;
 import com.example.palengke.databinding.FragmentCartBinding;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class CartFragment extends Fragment {
 
@@ -22,7 +34,7 @@ public class CartFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        // Correctly initialize binding
+        // Initialize binding
         binding = FragmentCartBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
@@ -32,32 +44,37 @@ public class CartFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(cartAdapter);
 
-        // Set default product data
-        int[] productImage = {
-                R.drawable.banana_img,
-                R.drawable.cabbage_img,
-                R.drawable.eggs_img
-        };
+        // Get the current user
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-        String[] productName = {
-                "Banana",
-                "Cabbage",
-                "Eggs"
-        };
+        if (user != null) {
+            // Fetch cart items for the logged-in user
+            DatabaseReference cartRef = FirebaseDatabase.getInstance()
+                    .getReference("cart")
+                    .child(user.getUid());
 
-        String[] productPrice = {
-                "₱50",
-                "₱75",
-                "₱210"
-        };
+            cartRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    List<CartItem> cartItemList = new ArrayList<>();
+                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                        CartItem cartItem = dataSnapshot.getValue(CartItem.class);
+                        if (cartItem != null) {
+                            cartItemList.add(cartItem);
+                        }
+                    }
+                    // Update the adapter with the fetched cart items
+                    cartAdapter.setCartItems(cartItemList);
+                }
 
-        String[] productQuantity = {
-                "Qty: 2 V",
-                "Qty: 546 V",
-                "Qty: 456 V"
-        };
-
-        cartAdapter.setProductData(productImage, productName, productPrice, productQuantity);
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    Toast.makeText(getContext(), "Failed to load cart items.", Toast.LENGTH_SHORT).show();
+                }
+            });
+        } else {
+            Toast.makeText(getContext(), "User not logged in.", Toast.LENGTH_SHORT).show();
+        }
 
         return root;
     }
@@ -65,6 +82,7 @@ public class CartFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        binding = null; // Clean up binding reference
+        binding = null;
     }
 }
+

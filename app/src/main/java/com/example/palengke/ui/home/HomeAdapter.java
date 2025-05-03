@@ -3,13 +3,21 @@ package com.example.palengke.ui.home;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.palengke.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
 
@@ -40,6 +48,35 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
         holder.nameTextView.setText(name[position]);
         holder.priceTextView.setText(price[position]);
         holder.quantityTextView.setText(quantity[position]);
+
+        holder.addToCartButton.setOnClickListener(v -> {
+            // Create a cart product object
+            Map<String, Object> cartItem = new HashMap<>();
+            cartItem.put("imageResId", image[position]);
+            cartItem.put("name", name[position]);
+            cartItem.put("price", price[position]);
+            cartItem.put("quantity", quantity[position]);
+
+            // Get current user
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+            if (user != null) {
+                String userId = user.getUid();
+                FirebaseDatabase.getInstance()
+                        .getReference("cart")
+                        .child(userId)
+                        .push()
+                        .setValue(cartItem)
+                        .addOnSuccessListener(aVoid ->
+                                Toast.makeText(v.getContext(), "Added to your cart", Toast.LENGTH_SHORT).show()
+                        )
+                        .addOnFailureListener(e ->
+                                Toast.makeText(v.getContext(), "Failed to add to cart", Toast.LENGTH_SHORT).show()
+                        );
+            } else {
+                Toast.makeText(v.getContext(), "User not logged in", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
@@ -53,6 +90,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
         TextView nameTextView;
         TextView priceTextView;
         TextView quantityTextView;
+        Button addToCartButton;
 
         public ViewHolder(View view) {
             super(view);
@@ -60,6 +98,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
             nameTextView = view.findViewById(R.id.productName);
             priceTextView = view.findViewById(R.id.productPrize);
             quantityTextView = view.findViewById(R.id.productQuantity);
+            addToCartButton = view.findViewById(R.id.addToCartButton);
         }
     }
 }

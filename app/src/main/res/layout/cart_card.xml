@@ -7,7 +7,8 @@
     app:cardElevation="6dp"
     app:cardCornerRadius="8dp"
     android:layout_marginTop="20dp"
-    android:layout_marginHorizontal="14dp">
+    android:layout_marginBottom="15dp"
+    >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -15,19 +16,14 @@
         android:orientation="vertical"
         android:padding="18dp">
 
-        <ImageView
-            android:id="@+id/productImage"
-            android:layout_width="match_parent"
-            android:layout_height="120dp"
-            android:src="@drawable/banana_img"/>
-
         <TextView
             android:id="@+id/productName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Fresh Banana 1kg"
+            android:textStyle="bold"
             android:gravity="center"
-            android:textSize="18dp"
+            android:textSize="24dp"
             android:fontFamily="@font/montserrat_alternates_medium"
             android:textColor="#4a4a4a"/>
 
@@ -55,7 +51,7 @@
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/montserrat_alternates_bold"
                 android:gravity="end"
-                android:text="Qty: 2 v"
+                android:text="Qty: 2"
                 android:textColor="#090909"
                 android:textSize="20dp" />
 

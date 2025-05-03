@@ -10,19 +10,17 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.palengke.R;
+import com.example.palengke.classes.CartItem;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
 
-    private int[] image;
-    private String[] name;
-    private String[] price;
-    private String[] quantity;
+    private List<CartItem> cartItems = new ArrayList<>();
 
-    public void setProductData(int[] image, String[] name, String[] price, String[] quantity) {
-        this.image = image;
-        this.name = name;
-        this.price = price;
-        this.quantity = quantity;
+    public void setCartItems(List<CartItem> cartItems) {
+        this.cartItems = cartItems;
         notifyDataSetChanged();
     }
 
@@ -36,30 +34,28 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.imageImageView.setImageResource(image[position]);
-        holder.nameTextView.setText(name[position]);
-        holder.priceTextView.setText(price[position]);
-        holder.quantityTextView.setText(quantity[position]);
+        CartItem cartItem = cartItems.get(position);
+        holder.nameTextView.setText(cartItem.getName());
+        holder.priceTextView.setText(cartItem.getPrice());
+        holder.quantityTextView.setText(cartItem.getQuantity());
     }
 
     @Override
     public int getItemCount() {
-        return name != null ? name.length : 0;
+        return cartItems.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-
-        ImageView imageImageView;
         TextView nameTextView;
         TextView priceTextView;
         TextView quantityTextView;
 
         public ViewHolder(View view) {
             super(view);
-            imageImageView = view.findViewById(R.id.productImage);
             nameTextView = view.findViewById(R.id.productName);
             priceTextView = view.findViewById(R.id.productPrize);
             quantityTextView = view.findViewById(R.id.productQuantity);
         }
     }
 }
+
