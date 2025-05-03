@@ -12,8 +12,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.palengke.R;
+import com.example.palengke.classes.CartItem;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.HashMap;
@@ -62,17 +64,24 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
 
             if (user != null) {
                 String userId = user.getUid();
-                FirebaseDatabase.getInstance()
-                        .getReference("cart")
-                        .child(userId)
-                        .push()
-                        .setValue(cartItem)
-                        .addOnSuccessListener(aVoid ->
-                                Toast.makeText(v.getContext(), "Added to your cart", Toast.LENGTH_SHORT).show()
-                        )
-                        .addOnFailureListener(e ->
-                                Toast.makeText(v.getContext(), "Failed to add to cart", Toast.LENGTH_SHORT).show()
-                        );
+                DatabaseReference cartRef = FirebaseDatabase.getInstance().getReference("cart").child(userId);
+
+                // Push to cart and get the generated key
+                String cartItemId = cartRef.push().getKey();
+
+                if (cartItemId != null) {
+                    // Create the CartItem and include the generated cartItemId
+                    CartItem newCartItem = new CartItem(cartItemId, name[position], price[position], quantity[position], image[position]);
+
+                    // Now store the cartItem in Firebase
+                    cartRef.child(cartItemId).setValue(newCartItem)
+                            .addOnSuccessListener(aVoid -> {
+                                Toast.makeText(v.getContext(), "Added to your cart", Toast.LENGTH_SHORT).show();
+                            })
+                            .addOnFailureListener(e -> {
+                                Toast.makeText(v.getContext(), "Failed to add to cart", Toast.LENGTH_SHORT).show();
+                            });
+                }
             } else {
                 Toast.makeText(v.getContext(), "User not logged in", Toast.LENGTH_SHORT).show();
             }
