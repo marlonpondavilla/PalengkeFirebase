@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.palengke.Login;
@@ -29,6 +30,7 @@ public class SettingsFragment extends Fragment {
     private FragmentSettingsBinding binding;
     private FirebaseAuth auth;
     private GoogleSignInClient googleSignInClient;
+    private TextView userProfileName;
 
     public static SettingsFragment newInstance() {
         return new SettingsFragment();
@@ -42,6 +44,14 @@ public class SettingsFragment extends Fragment {
         View root = binding.getRoot();
 
         auth = FirebaseAuth.getInstance();
+
+        // Display signed-in user's email
+        if (auth.getCurrentUser() != null) {
+            String email = auth.getCurrentUser().getEmail();
+            binding.userProfileName.setText(email);
+        } else {
+            binding.userProfileName.setText("Not signed in");
+        }
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))

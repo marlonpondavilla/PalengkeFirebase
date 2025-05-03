@@ -50,16 +50,27 @@
                 android:layout_marginTop="10dp" />
 
             <TextView
+                android:id="@+id/productQuantityLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:paddingRight="10dp"
+                android:fontFamily="@font/montserrat_alternates_bold"
+                android:gravity="end"
+                android:text="Qty:"
+                android:textColor="#090909"
+                android:textSize="20dp" />
+
+            <TextView
                 android:id="@+id/productQuantity"
-                android:layout_width="150dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/montserrat_alternates_bold"
                 android:gravity="end"
-                android:text="Qty: 2 v"
+                android:text="0"
                 android:textColor="#090909"
                 android:textSize="20dp" />
-
 
         </LinearLayout>
 

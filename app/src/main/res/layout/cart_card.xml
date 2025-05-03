@@ -28,35 +28,54 @@
             android:textColor="#4a4a4a"/>
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_gravity="center">
+            android:layout_gravity="center"
+            android:paddingHorizontal="20dp"
+            android:paddingVertical="10dp"
+            android:weightSum="1">
 
+            <!-- Price on the left -->
             <TextView
                 android:id="@+id/productPrize"
-                android:layout_width="150dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="P 50"
-                android:gravity="start"
-                android:textSize="20dp"
+                android:textSize="20sp"
                 android:fontFamily="@font/montserrat_alternates_bold"
                 android:textColor="#090909"
-                android:layout_marginTop="10dp" />
+                android:layout_weight="0.5" />
 
+            <!-- Space in the middle -->
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.25" />
+
+            <!-- Quantity Label on the right -->
+            <TextView
+                android:id="@+id/productQuantityLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Qty:"
+                android:textSize="20sp"
+                android:fontFamily="@font/montserrat_alternates_bold"
+                android:textColor="#090909" />
+
+            <!-- Quantity Value on the right -->
             <TextView
                 android:id="@+id/productQuantity"
-                android:layout_width="150dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginStart="4dp"
+                android:text="0"
+                android:textSize="20sp"
                 android:fontFamily="@font/montserrat_alternates_bold"
-                android:gravity="end"
-                android:text="Qty: 2"
-                android:textColor="#090909"
-                android:textSize="20dp" />
-
+                android:textColor="#090909" />
 
         </LinearLayout>
+
 
         <LinearLayout
             android:layout_width="match_parent"
