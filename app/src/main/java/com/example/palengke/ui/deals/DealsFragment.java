@@ -23,30 +23,37 @@ public class DealsFragment extends Fragment {
         binding = FragmentDealsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        DealsViewModel dealsViewModel =
-                new ViewModelProvider(this).get(DealsViewModel.class);
+        DealsViewModel dealsViewModel = new ViewModelProvider(this).get(DealsViewModel.class);
 
         RecyclerView recyclerView = binding.recyclerView;
         dealsAdapter = new DealsAdapter();
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(dealsAdapter);
 
-        // Observing the data from the ViewModel
-        dealsViewModel.getProductTitles().observe(getViewLifecycleOwner(), titles -> {
-            String[] prices = dealsViewModel.getProductPrices().getValue();
-            Integer[] images = dealsViewModel.getProductImages().getValue();
-            String[] quantities = dealsViewModel.getProductQuantities().getValue();
-            dealsAdapter.setProductData(titles, prices, images, quantities);
-        });
-
-        // Sample data for products
+        // Static product data
         String[] productTitles = {"Nike Shoes", "Rolex Watch", "Banana", "Shein"};
         String[] productPrices = {"P120", "P5000", "P30", "P3490"};
         String[] quantities = {"1", "2", "3", "4"};
-        Integer[] productImages = {R.drawable.nike_brand, R.drawable.rolex_brand, R.drawable.banana_img, R.drawable.shein_brand};
+        Integer[] productImages = {
+                R.drawable.nike_brand,
+                R.drawable.rolex_brand,
+                R.drawable.banana_img,
+                R.drawable.shein_brand
+        };
 
-        // Set data to ViewModel
+        // Set data to ViewModel first
         dealsViewModel.setProductData(productTitles, productPrices, productImages, quantities);
+
+        // Now observe and update adapter
+        dealsViewModel.getProductTitles().observe(getViewLifecycleOwner(), titles -> {
+            String[] prices = dealsViewModel.getProductPrices().getValue();
+            Integer[] images = dealsViewModel.getProductImages().getValue();
+            String[] quantity = dealsViewModel.getProductQuantities().getValue();
+
+            if (titles != null && prices != null && images != null && quantity != null) {
+                dealsAdapter.setProductData(titles, prices, images, quantity);
+            }
+        });
 
         return root;
     }

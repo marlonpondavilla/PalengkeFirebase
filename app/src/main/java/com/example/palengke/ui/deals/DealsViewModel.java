@@ -6,10 +6,10 @@ import androidx.lifecycle.ViewModel;
 
 public class DealsViewModel extends ViewModel {
 
-    private MutableLiveData<String[]> productTitles = new MutableLiveData<>();
-    private MutableLiveData<String[]> productPrices = new MutableLiveData<>();
-    private MutableLiveData<Integer[]> productImages = new MutableLiveData<>();
-    private MutableLiveData<String[]> productQuantities = new MutableLiveData<>();
+    private final MutableLiveData<String[]> productTitles = new MutableLiveData<>();
+    private final MutableLiveData<String[]> productPrices = new MutableLiveData<>();
+    private final MutableLiveData<Integer[]> productImages = new MutableLiveData<>();
+    private final MutableLiveData<String[]> productQuantities = new MutableLiveData<>();
 
     public LiveData<String[]> getProductTitles() {
         return productTitles;
