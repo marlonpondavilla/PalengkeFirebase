@@ -1,17 +1,95 @@
-<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="24dp"
     tools:context=".Signup">
 
+    <!-- App Title or Logo -->
     <TextView
+        android:id="@+id/signup_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="signup page"
-        />
+        android:text="Create Account"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp"
+        android:textColor="#000000" />
+
+    <!-- Name Field -->
+    <EditText
+        android:id="@+id/editTextName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Full Name"
+        android:inputType="textPersonName"
+        android:layout_below="@id/signup_title"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/edit_text_border"
+        android:padding="12dp" />
+
+    <!-- Email Field -->
+    <EditText
+        android:id="@+id/editTextEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Email"
+        android:inputType="textEmailAddress"
+        android:layout_below="@id/editTextName"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/edit_text_border"
+        android:padding="12dp" />
+
+    <!-- Password Field -->
+    <EditText
+        android:id="@+id/editTextPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Password"
+        android:inputType="textPassword"
+        android:layout_below="@id/editTextEmail"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/edit_text_border"
+        android:padding="12dp" />
+
+    <!-- Confirm Password Field -->
+    <EditText
+        android:id="@+id/editTextConfirmPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Confirm Password"
+        android:inputType="textPassword"
+        android:layout_below="@id/editTextPassword"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/edit_text_border"
+        android:padding="12dp" />
+
+    <!-- Sign Up Button -->
+    <Button
+        android:id="@+id/buttonSignUp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Sign Up"
+        android:layout_below="@id/editTextConfirmPassword"
+        android:layout_marginTop="24dp"
+        android:backgroundTint="#4CAF50"
+        android:textColor="#FFFFFF"
+        android:padding="12dp"
+        android:textStyle="bold" />
+
+    <!-- Already have account -->
+    <TextView
+        android:id="@+id/textViewLoginLink"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Already have an account? Log in"
+        android:textColor="#1E88E5"
+        android:layout_below="@id/buttonSignUp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
+        android:textSize="14sp" />
 
 </RelativeLayout>

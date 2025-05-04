@@ -50,18 +50,6 @@
                 android:textColor="#090909"
                 android:layout_marginTop="10dp" />
 
-<!--            &lt;!&ndash; Quantity Label &ndash;&gt;-->
-<!--            <TextView-->
-<!--                android:id="@+id/productQuantityLabel"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginTop="10dp"-->
-<!--                android:paddingRight="10dp"-->
-<!--                android:fontFamily="@font/montserrat_alternates_bold"-->
-<!--                android:gravity="end"-->
-<!--                android:text="Qty:"-->
-<!--                android:textColor="#090909"-->
-<!--                android:textSize="20dp" />-->
 
             <!-- Decrement Button (-) -->
             <Button
