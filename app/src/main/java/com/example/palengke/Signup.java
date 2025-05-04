@@ -135,7 +135,7 @@ public class Signup extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 auth.signOut();
-                Intent goBackToLoginPage = new Intent(Signup.this, Signup.class);
+                Intent goBackToLoginPage = new Intent(Signup.this, Login.class);
                 startActivity(goBackToLoginPage);
             }
         });

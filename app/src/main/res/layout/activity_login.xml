@@ -26,32 +26,32 @@
 
         <EditText
             android:id="@+id/usernameInput"
-            android:layout_width="240dp"
+            android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_below="@id/loginTitle"
             android:background="@drawable/edit_text_border"
-            android:textColor="#F7F7F7"
+            android:textColor="@color/black"
             android:textColorHint="#AAAAAA"
             android:hint="example@test.com" />
 
         <EditText
             android:id="@+id/passwordInput"
-            android:layout_width="240dp"
+            android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:layout_below="@+id/usernameInput"
             android:layout_centerHorizontal="true"
             android:inputType="textPassword"
             android:background="@drawable/edit_text_border"
-            android:textColor="#F7F7F7"
+            android:textColor="@color/black"
             android:textColorHint="#AAAAAA"
-            android:hint="Enter password" />
+            android:hint="********" />
 
 
         <Button
             android:id="@+id/loginBtn"
-            android:layout_width="240dp"
+            android:layout_width="250dp"
             android:layout_height="52dp"
             android:layout_marginTop="24dp"
             android:layout_centerHorizontal="true"
@@ -62,7 +62,7 @@
 
         <Button
             android:id="@+id/signupBtn"
-            android:layout_width="240dp"
+            android:layout_width="250dp"
             android:layout_height="52dp"
             android:layout_centerHorizontal="true"
             android:backgroundTint="#3E7B27"
