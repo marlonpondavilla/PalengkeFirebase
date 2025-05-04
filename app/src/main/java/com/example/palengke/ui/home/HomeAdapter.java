@@ -15,6 +15,7 @@ import com.example.palengke.R;
 import com.example.palengke.classes.CartItem;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -52,28 +53,46 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
         holder.quantityTextView.setText(quantity[position]);
 
         holder.addToCartButton.setOnClickListener(v -> {
-            Map<String, Object> cartItem = new HashMap<>();
-            cartItem.put("imageResId", image[position]);
-            cartItem.put("name", name[position]);
-            cartItem.put("price", price[position]);
-            cartItem.put("quantity", quantity[position]);
-
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             if (user != null) {
                 String userId = user.getUid();
                 DatabaseReference cartRef = FirebaseDatabase.getInstance().getReference("cart").child(userId);
-                String cartItemId = cartRef.push().getKey();
+                String productName = name[position];
+                String productQuantity = quantity[position];
 
-                if (cartItemId != null) {
-                    CartItem newCartItem = new CartItem(cartItemId, name[position], price[position], quantity[position], image[position]);
-                    cartRef.child(cartItemId).setValue(newCartItem)
-                            .addOnSuccessListener(aVoid -> Toast.makeText(v.getContext(), "Added to your cart", Toast.LENGTH_SHORT).show())
-                            .addOnFailureListener(e -> Toast.makeText(v.getContext(), "Failed to add to cart", Toast.LENGTH_SHORT).show());
-                }
+                cartRef.orderByChild("name").equalTo(productName)
+                        .get()
+                        .addOnSuccessListener(dataSnapshot -> {
+                            if (dataSnapshot.exists()) {
+                                // Product already in cart: Update the quantity
+                                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                    CartItem existingItem = snapshot.getValue(CartItem.class);
+                                    if (existingItem != null) {
+                                        int existingQty = Integer.parseInt(existingItem.getQuantity());
+                                        int newQty = existingQty + Integer.parseInt(productQuantity);
+
+                                        snapshot.getRef().child("quantity").setValue(String.valueOf(newQty))
+                                                .addOnSuccessListener(aVoid -> Toast.makeText(v.getContext(), "Quantity updated in cart", Toast.LENGTH_SHORT).show())
+                                                .addOnFailureListener(e -> Toast.makeText(v.getContext(), "Failed to update cart", Toast.LENGTH_SHORT).show());
+                                    }
+                                }
+                            } else {
+                                // Product not in cart: Add as new item
+                                String cartItemId = cartRef.push().getKey();
+                                if (cartItemId != null) {
+                                    CartItem newCartItem = new CartItem(cartItemId, productName, price[position], productQuantity, image[position]);
+                                    cartRef.child(cartItemId).setValue(newCartItem)
+                                            .addOnSuccessListener(aVoid -> Toast.makeText(v.getContext(), "Added to your cart", Toast.LENGTH_SHORT).show())
+                                            .addOnFailureListener(e -> Toast.makeText(v.getContext(), "Failed to add to cart", Toast.LENGTH_SHORT).show());
+                                }
+                            }
+                        })
+                        .addOnFailureListener(e -> Toast.makeText(v.getContext(), "Error accessing cart", Toast.LENGTH_SHORT).show());
             } else {
                 Toast.makeText(v.getContext(), "User not logged in", Toast.LENGTH_SHORT).show();
             }
         });
+
 
         // "+" button click
         holder.plusButton.setOnClickListener(v -> {

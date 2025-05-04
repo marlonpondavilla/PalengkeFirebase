@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.palengke.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -88,18 +89,39 @@ public class DealsAdapter extends RecyclerView.Adapter<DealsAdapter.DealsViewHol
                 String userId = user.getUid();
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
                 DatabaseReference cartRef = database.getReference("cart").child(userId);
-                String cartItemId = cartRef.push().getKey();
+                String productName = productTitles[position];
 
-                if (cartItemId != null) {
-                    cartItem.put("id", cartItemId);
-                    cartRef.child(cartItemId).setValue(cartItem)
-                            .addOnSuccessListener(aVoid -> Toast.makeText(v.getContext(), "Added to your cart", Toast.LENGTH_SHORT).show())
-                            .addOnFailureListener(e -> Toast.makeText(v.getContext(), "Failed to add to cart", Toast.LENGTH_SHORT).show());
-                }
+                cartRef.orderByChild("name").equalTo(productName)
+                        .get()
+                        .addOnSuccessListener(dataSnapshot -> {
+                            if (dataSnapshot.exists()) {
+                                // Product exists: update quantity
+                                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                    String existingQtyStr = snapshot.child("quantity").getValue(String.class);
+                                    int existingQty = existingQtyStr != null ? Integer.parseInt(existingQtyStr) : 0;
+                                    int newQty = existingQty + Integer.parseInt(productQuantity[position]);
+
+                                    snapshot.getRef().child("quantity").setValue(String.valueOf(newQty))
+                                            .addOnSuccessListener(aVoid -> Toast.makeText(v.getContext(), "Cart updated", Toast.LENGTH_SHORT).show())
+                                            .addOnFailureListener(e -> Toast.makeText(v.getContext(), "Failed to update cart", Toast.LENGTH_SHORT).show());
+                                }
+                            } else {
+                                // Product doesn't exist: add new
+                                String cartItemId = cartRef.push().getKey();
+                                if (cartItemId != null) {
+                                    cartItem.put("id", cartItemId);
+                                    cartRef.child(cartItemId).setValue(cartItem)
+                                            .addOnSuccessListener(aVoid -> Toast.makeText(v.getContext(), "Added to your cart", Toast.LENGTH_SHORT).show())
+                                            .addOnFailureListener(e -> Toast.makeText(v.getContext(), "Failed to add to cart", Toast.LENGTH_SHORT).show());
+                                }
+                            }
+                        })
+                        .addOnFailureListener(e -> Toast.makeText(v.getContext(), "Error checking cart", Toast.LENGTH_SHORT).show());
             } else {
                 Toast.makeText(v.getContext(), "User not logged in", Toast.LENGTH_SHORT).show();
             }
         });
+
     }
 
 
