@@ -42,24 +42,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/product_image" />
 
-        <!-- Buttons in One Line -->
-
-<!--        <TextView-->
-<!--            android:id="@+id/product_price"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_margin="10dp"-->
-<!--            android:layout_marginTop="12dp"-->
-<!--            android:fontFamily="@font/montserrat_alternates_bold"-->
-<!--            android:text="P120"-->
-<!--            android:textColor="#FF0000"-->
-<!--            android:textSize="22sp"-->
-<!--            android:textStyle="bold"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            app:layout_constraintHorizontal_bias="0.259"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            app:layout_constraintTop_toBottomOf="@id/product_title" />-->
-
         <LinearLayout
             android:id="@+id/price_quantity_layout"
             android:layout_width="match_parent"
@@ -88,18 +70,18 @@
                 android:layout_height="45dp"
                 android:text="-"
                 android:textSize="20sp"
-                android:layout_marginEnd="8dp"/>
+                />
 
             <TextView
                 android:id="@+id/quantity"
-                android:layout_width="wrap_content"
+                android:layout_width="30dp"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/montserrat_alternates_medium"
                 android:text="0"
+                android:gravity="center"
                 android:textColor="#000000"
                 android:textSize="18sp"
-                android:textStyle="bold"
-                android:layout_marginEnd="8dp" />
+                android:textStyle="bold" />
 
             <Button
                 android:id="@+id/button_increase"

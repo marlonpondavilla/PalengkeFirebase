@@ -30,7 +30,7 @@ public class DealsAdapter extends RecyclerView.Adapter<DealsAdapter.DealsViewHol
     public static class DealsViewHolder extends RecyclerView.ViewHolder {
         TextView productTitle, productPrice, productQuantity;
         ImageView productImage;
-        Button addToCartButton;
+        Button addToCartButton, plusButton, minusButton;
 
         public DealsViewHolder(View itemView) {
             super(itemView);
@@ -39,8 +39,11 @@ public class DealsAdapter extends RecyclerView.Adapter<DealsAdapter.DealsViewHol
             productImage = itemView.findViewById(R.id.product_image);
             productQuantity = itemView.findViewById(R.id.quantity);
             addToCartButton = itemView.findViewById(R.id.buttonAddToCart);
+            plusButton = itemView.findViewById(R.id.button_increase);
+            minusButton = itemView.findViewById(R.id.button_decrease);
         }
     }
+
 
     @NonNull
     @Override
@@ -57,40 +60,48 @@ public class DealsAdapter extends RecyclerView.Adapter<DealsAdapter.DealsViewHol
         holder.productImage.setImageResource(productImages[position]);
         holder.productQuantity.setText(productQuantity[position]);
 
+        holder.plusButton.setOnClickListener(v -> {
+            int qty = Integer.parseInt(productQuantity[position]);
+            qty++;
+            productQuantity[position] = String.valueOf(qty);
+            holder.productQuantity.setText(productQuantity[position]);
+        });
+
+        holder.minusButton.setOnClickListener(v -> {
+            int qty = Integer.parseInt(productQuantity[position]);
+            if (qty > 0) {
+                qty--;
+                productQuantity[position] = String.valueOf(qty);
+                holder.productQuantity.setText(productQuantity[position]);
+            }
+        });
+
         holder.addToCartButton.setOnClickListener(v -> {
             Map<String, Object> cartItem = new HashMap<>();
             cartItem.put("name", productTitles[position]);
             cartItem.put("price", productPrices[position]);
             cartItem.put("quantity", productQuantity[position]);
-            cartItem.put("imageResId", productImages[position]);  // Storing drawable ID
+            cartItem.put("imageResId", productImages[position]);
 
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             if (user != null) {
                 String userId = user.getUid();
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
                 DatabaseReference cartRef = database.getReference("cart").child(userId);
-
-                // Generate a unique ID for the cart item (same approach as HomeAdapter)
                 String cartItemId = cartRef.push().getKey();
 
                 if (cartItemId != null) {
-                    // Add the generated unique ID to the cart item
                     cartItem.put("id", cartItemId);
-
-                    // Add the cart item to Firebase with the unique ID
                     cartRef.child(cartItemId).setValue(cartItem)
-                            .addOnSuccessListener(aVoid -> {
-                                Toast.makeText(v.getContext(), "Added to your cart", Toast.LENGTH_SHORT).show();
-                            })
-                            .addOnFailureListener(e -> {
-                                Toast.makeText(v.getContext(), "Failed to add to cart", Toast.LENGTH_SHORT).show();
-                            });
+                            .addOnSuccessListener(aVoid -> Toast.makeText(v.getContext(), "Added to your cart", Toast.LENGTH_SHORT).show())
+                            .addOnFailureListener(e -> Toast.makeText(v.getContext(), "Failed to add to cart", Toast.LENGTH_SHORT).show());
                 }
             } else {
                 Toast.makeText(v.getContext(), "User not logged in", Toast.LENGTH_SHORT).show();
             }
         });
     }
+
 
     @Override
     public int getItemCount() {

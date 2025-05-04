@@ -53,9 +53,9 @@ public class HomeFragment extends Fragment {
         };
 
         String[] productQuantity = {
-                "2", "3", "68",
-                "54", "45", "24",
-                "45", "21", "98", "55"
+                "1", "1", "1",
+                "1", "1", "1",
+                "1", "1", "1", "1"
         };
 
         homeAdapter.setProductData(productImage, productName, productPrice, productQuantity);

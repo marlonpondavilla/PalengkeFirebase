@@ -33,7 +33,7 @@ public class DealsFragment extends Fragment {
         // Static product data
         String[] productTitles = {"Nike Shoes", "Rolex Watch", "Banana", "Shein"};
         String[] productPrices = {"P120", "P5000", "P30", "P3490"};
-        String[] quantities = {"1", "2", "3", "4"};
+        String[] quantities = {"1", "1", "1", "1"};
         Integer[] productImages = {
                 R.drawable.nike_brand,
                 R.drawable.rolex_brand,
