@@ -31,7 +31,7 @@ public class DealsAdapter extends RecyclerView.Adapter<DealsAdapter.DealsViewHol
     public static class DealsViewHolder extends RecyclerView.ViewHolder {
         TextView productTitle, productPrice, productQuantity;
         ImageView productImage;
-        Button addToCartButton, plusButton, minusButton;
+        Button addToCartButton, plusButton, minusButton, buttonBuyNow;
 
         public DealsViewHolder(View itemView) {
             super(itemView);
@@ -42,9 +42,9 @@ public class DealsAdapter extends RecyclerView.Adapter<DealsAdapter.DealsViewHol
             addToCartButton = itemView.findViewById(R.id.buttonAddToCart);
             plusButton = itemView.findViewById(R.id.button_increase);
             minusButton = itemView.findViewById(R.id.button_decrease);
+            buttonBuyNow = itemView.findViewById(R.id.button_buy_now);
         }
     }
-
 
     @NonNull
     @Override
@@ -56,40 +56,79 @@ public class DealsAdapter extends RecyclerView.Adapter<DealsAdapter.DealsViewHol
 
     @Override
     public void onBindViewHolder(@NonNull DealsViewHolder holder, int position) {
-        holder.productTitle.setText(productTitles[position]);
-        holder.productPrice.setText(productPrices[position]);
-        holder.productImage.setImageResource(productImages[position]);
-        holder.productQuantity.setText(productQuantity[position]);
+        final int pos = position; // fix position for async calls
+
+        holder.productTitle.setText(productTitles[pos]);
+        holder.productPrice.setText(productPrices[pos]);
+        holder.productImage.setImageResource(productImages[pos]);
+        holder.productQuantity.setText(productQuantity[pos]);
 
         holder.plusButton.setOnClickListener(v -> {
-            int qty = Integer.parseInt(productQuantity[position]);
+            int qty = Integer.parseInt(productQuantity[pos].replaceAll("[^\\d]", ""));
             qty++;
-            productQuantity[position] = String.valueOf(qty);
-            holder.productQuantity.setText(productQuantity[position]);
+            productQuantity[pos] = String.valueOf(qty);
+            holder.productQuantity.setText(productQuantity[pos]);
         });
 
         holder.minusButton.setOnClickListener(v -> {
-            int qty = Integer.parseInt(productQuantity[position]);
+            int qty = Integer.parseInt(productQuantity[pos].replaceAll("[^\\d]", ""));
             if (qty > 0) {
                 qty--;
-                productQuantity[position] = String.valueOf(qty);
-                holder.productQuantity.setText(productQuantity[position]);
+                productQuantity[pos] = String.valueOf(qty);
+                holder.productQuantity.setText(productQuantity[pos]);
             }
         });
 
-        holder.addToCartButton.setOnClickListener(v -> {
-            Map<String, Object> cartItem = new HashMap<>();
-            cartItem.put("name", productTitles[position]);
-            cartItem.put("price", productPrices[position]);
-            cartItem.put("quantity", productQuantity[position]);
-            cartItem.put("imageResId", productImages[position]);
+        holder.buttonBuyNow.setOnClickListener(v -> {
+            new androidx.appcompat.app.AlertDialog.Builder(v.getContext())
+                    .setTitle("Buy Now")
+                    .setMessage("Are you sure you want to buy \"" + productTitles[pos] + "\"?")
+                    .setPositiveButton("Yes", (dialog, which) -> {
+                        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                        if (user != null) {
+                            String userId = user.getUid();
+                            String productId = FirebaseDatabase.getInstance().getReference().push().getKey();
 
+                            if (productId != null) {
+                                DatabaseReference buyRef = FirebaseDatabase.getInstance()
+                                        .getReference("BuyProducts")
+                                        .child(userId)
+                                        .child(productId);
+
+                                String cleanQuantity = productQuantity[pos].replaceAll("[^\\d]", "");
+                                String cleanPrice = productPrices[pos].replaceAll("[^\\d.]", "");
+
+                                Map<String, Object> productData = new HashMap<>();
+                                productData.put("id", productId);
+                                productData.put("name", productTitles[pos]);
+                                productData.put("price", cleanPrice);
+                                productData.put("quantity", cleanQuantity);
+                                productData.put("image", productImages[pos]);
+
+                                buyRef.setValue(productData)
+                                        .addOnSuccessListener(aVoid ->
+                                                Toast.makeText(v.getContext(), "You have successfully bought the product", Toast.LENGTH_SHORT).show()
+                                        )
+                                        .addOnFailureListener(e ->
+                                                Toast.makeText(v.getContext(), "Failed to buy product", Toast.LENGTH_SHORT).show()
+                                        );
+                            }
+                        } else {
+                            Toast.makeText(v.getContext(), "User not logged in", Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .setNegativeButton("Cancel", null)
+                    .show();
+        });
+
+        holder.addToCartButton.setOnClickListener(v -> {
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             if (user != null) {
                 String userId = user.getUid();
-                FirebaseDatabase database = FirebaseDatabase.getInstance();
-                DatabaseReference cartRef = database.getReference("cart").child(userId);
-                String productName = productTitles[position];
+                DatabaseReference cartRef = FirebaseDatabase.getInstance().getReference("cart").child(userId);
+                String productName = productTitles[pos];
+                String cleanQuantity = productQuantity[pos].replaceAll("[^\\d]", "");
+                String cleanPrice = productPrices[pos].replaceAll("[^\\d.]", "");
 
                 cartRef.orderByChild("name").equalTo(productName)
                         .get()
@@ -99,7 +138,7 @@ public class DealsAdapter extends RecyclerView.Adapter<DealsAdapter.DealsViewHol
                                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                                     String existingQtyStr = snapshot.child("quantity").getValue(String.class);
                                     int existingQty = existingQtyStr != null ? Integer.parseInt(existingQtyStr) : 0;
-                                    int newQty = existingQty + Integer.parseInt(productQuantity[position]);
+                                    int newQty = existingQty + Integer.parseInt(cleanQuantity);
 
                                     snapshot.getRef().child("quantity").setValue(String.valueOf(newQty))
                                             .addOnSuccessListener(aVoid -> Toast.makeText(v.getContext(), "Cart updated", Toast.LENGTH_SHORT).show())
@@ -109,7 +148,13 @@ public class DealsAdapter extends RecyclerView.Adapter<DealsAdapter.DealsViewHol
                                 // Product doesn't exist: add new
                                 String cartItemId = cartRef.push().getKey();
                                 if (cartItemId != null) {
+                                    Map<String, Object> cartItem = new HashMap<>();
                                     cartItem.put("id", cartItemId);
+                                    cartItem.put("name", productName);
+                                    cartItem.put("price", cleanPrice);
+                                    cartItem.put("quantity", cleanQuantity);
+                                    cartItem.put("imageResId", productImages[pos]);
+
                                     cartRef.child(cartItemId).setValue(cartItem)
                                             .addOnSuccessListener(aVoid -> Toast.makeText(v.getContext(), "Added to your cart", Toast.LENGTH_SHORT).show())
                                             .addOnFailureListener(e -> Toast.makeText(v.getContext(), "Failed to add to cart", Toast.LENGTH_SHORT).show());
@@ -121,9 +166,7 @@ public class DealsAdapter extends RecyclerView.Adapter<DealsAdapter.DealsViewHol
                 Toast.makeText(v.getContext(), "User not logged in", Toast.LENGTH_SHORT).show();
             }
         });
-
     }
-
 
     @Override
     public int getItemCount() {

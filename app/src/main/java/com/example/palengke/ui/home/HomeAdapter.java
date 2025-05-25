@@ -47,24 +47,71 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.imageImageView.setImageResource(image[position]);
-        holder.nameTextView.setText(name[position]);
-        holder.priceTextView.setText(price[position]);
-        holder.quantityTextView.setText(quantity[position]);
+        final int pos = position; // Make a final copy of position
 
+        holder.imageImageView.setImageResource(image[pos]);
+        holder.nameTextView.setText(name[pos]);
+        holder.priceTextView.setText(price[pos]);
+        holder.quantityTextView.setText(quantity[pos]);
+
+        // Buy Now button click
+        holder.buyNowBtn.setOnClickListener(v -> {
+            new androidx.appcompat.app.AlertDialog.Builder(v.getContext())
+                    .setTitle("Buy Now")
+                    .setMessage("Are you sure you want to buy \"" + name[pos] + "\"?")
+                    .setPositiveButton("Yes", (dialog, which) -> {
+                        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                        if (user != null) {
+                            String userId = user.getUid();
+                            String productId = FirebaseDatabase.getInstance().getReference().push().getKey();
+
+                            if (productId != null) {
+                                DatabaseReference buyRef = FirebaseDatabase.getInstance()
+                                        .getReference("BuyProducts")
+                                        .child(userId)
+                                        .child(productId);
+
+                                // Clean quantity and price from symbols like ₱, spaces, etc.
+                                String cleanQuantity = quantity[pos].replaceAll("[^\\d]", "");
+                                String cleanPrice = price[pos].replaceAll("[^\\d.]", "");
+
+                                Map<String, Object> productData = new HashMap<>();
+                                productData.put("id", productId);
+                                productData.put("name", name[pos]);
+                                productData.put("price", cleanPrice);
+                                productData.put("quantity", cleanQuantity);
+                                productData.put("image", image[pos]);
+
+                                buyRef.setValue(productData)
+                                        .addOnSuccessListener(aVoid ->
+                                                Toast.makeText(v.getContext(), "You have successfully bought the product", Toast.LENGTH_SHORT).show()
+                                        )
+                                        .addOnFailureListener(e ->
+                                                Toast.makeText(v.getContext(), "Failed to buy product", Toast.LENGTH_SHORT).show()
+                                        );
+                            }
+                        } else {
+                            Toast.makeText(v.getContext(), "User not logged in", Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .setNegativeButton("Cancel", null)
+                    .show();
+        });
+
+        // Add to Cart button click
         holder.addToCartButton.setOnClickListener(v -> {
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             if (user != null) {
                 String userId = user.getUid();
                 DatabaseReference cartRef = FirebaseDatabase.getInstance().getReference("cart").child(userId);
-                String productName = name[position];
-                String productQuantity = quantity[position];
+                String productName = name[pos];
+                String productQuantity = quantity[pos].replaceAll("[^\\d]", ""); // Clean quantity here too
 
                 cartRef.orderByChild("name").equalTo(productName)
                         .get()
                         .addOnSuccessListener(dataSnapshot -> {
                             if (dataSnapshot.exists()) {
-                                // Product already in cart: Update the quantity
+                                // Product already in cart: update quantity
                                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                                     CartItem existingItem = snapshot.getValue(CartItem.class);
                                     if (existingItem != null) {
@@ -77,10 +124,13 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
                                     }
                                 }
                             } else {
-                                // Product not in cart: Add as new item
+                                // Product not in cart: add new item
                                 String cartItemId = cartRef.push().getKey();
                                 if (cartItemId != null) {
-                                    CartItem newCartItem = new CartItem(cartItemId, productName, price[position], productQuantity, image[position]);
+                                    // Clean price here as well
+                                    String cleanPrice = price[pos].replaceAll("[^\\d.]", "");
+
+                                    CartItem newCartItem = new CartItem(cartItemId, productName, cleanPrice, productQuantity, image[pos]);
                                     cartRef.child(cartItemId).setValue(newCartItem)
                                             .addOnSuccessListener(aVoid -> Toast.makeText(v.getContext(), "Added to your cart", Toast.LENGTH_SHORT).show())
                                             .addOnFailureListener(e -> Toast.makeText(v.getContext(), "Failed to add to cart", Toast.LENGTH_SHORT).show());
@@ -93,25 +143,24 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
             }
         });
 
-
-        // "+" button click
         holder.plusButton.setOnClickListener(v -> {
-            int currentQty = Integer.parseInt(quantity[position]);
+            int currentQty = Integer.parseInt(quantity[pos].replaceAll("[^\\d]", ""));
             currentQty++;
-            quantity[position] = String.valueOf(currentQty);
-            holder.quantityTextView.setText(quantity[position]);
+            quantity[pos] = String.valueOf(currentQty);
+            holder.quantityTextView.setText(quantity[pos]);
         });
 
-        // "−" button click
         holder.minusButton.setOnClickListener(v -> {
-            int currentQty = Integer.parseInt(quantity[position]);
+            int currentQty = Integer.parseInt(quantity[pos].replaceAll("[^\\d]", ""));
             if (currentQty > 0) {
                 currentQty--;
-                quantity[position] = String.valueOf(currentQty);
-                holder.quantityTextView.setText(quantity[position]);
+                quantity[pos] = String.valueOf(currentQty);
+                holder.quantityTextView.setText(quantity[pos]);
             }
         });
     }
+
+
 
 
     @Override
@@ -125,7 +174,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
         TextView nameTextView;
         TextView priceTextView;
         TextView quantityTextView;
-        Button addToCartButton, plusButton, minusButton;
+        Button addToCartButton, plusButton, minusButton, buyNowBtn;
 
         public ViewHolder(View view) {
             super(view);
@@ -134,6 +183,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
             priceTextView = view.findViewById(R.id.productPrize);
             quantityTextView = view.findViewById(R.id.productQuantity);
             addToCartButton = view.findViewById(R.id.addToCartButton);
+            buyNowBtn = view.findViewById(R.id.buyNowBtn);
             plusButton = view.findViewById(R.id.plusButton);
             minusButton = view.findViewById(R.id.minusButton);
         }

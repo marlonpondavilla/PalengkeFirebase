@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.palengke.CompletedOrders;
 import com.example.palengke.Login;
 import com.example.palengke.R;
 import com.example.palengke.databinding.FragmentSettingsBinding;
@@ -72,6 +73,21 @@ public class SettingsFragment extends Fragment {
                     Toast.makeText(requireActivity(), "Logout successfully", Toast.LENGTH_SHORT).show();
                 }
             });
+        });
+
+        binding.completedOrdersButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent toCompletedOrders = new Intent(getActivity(), CompletedOrders.class);
+                startActivity(toCompletedOrders);
+            }
+        });
+
+        binding.cancelledOrdersButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(requireActivity(), "You don't have any cancelled order yet.", Toast.LENGTH_SHORT).show();
+            }
         });
 
         return root;

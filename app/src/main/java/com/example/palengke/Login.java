@@ -99,6 +99,7 @@ public class Login extends AppCompatActivity {
                                 Toast.makeText(Login.this, "user does not exist", Toast.LENGTH_SHORT).show();
                             } else if(e instanceof FirebaseAuthInvalidCredentialsException){
                                 Toast.makeText(Login.this, "Email or Password is incorrect.", Toast.LENGTH_SHORT).show();
+                                password.setError("Email or Password is incorrect.");
                             } else{
                                 Toast.makeText(Login.this, "Login Err: " + e.getMessage(), Toast.LENGTH_LONG).show();
                             }

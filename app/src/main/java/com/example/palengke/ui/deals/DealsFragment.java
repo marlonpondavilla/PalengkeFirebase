@@ -31,13 +31,13 @@ public class DealsFragment extends Fragment {
         recyclerView.setAdapter(dealsAdapter);
 
         // Static product data
-        String[] productTitles = {"Nike Shoes", "Rolex Watch", "Banana", "Shein"};
-        String[] productPrices = {"P120", "P5000", "P30", "P3490"};
+        String[] productTitles = {"Nike Shoes", "Rolex Watch", "Human Made", "Shein"};
+        String[] productPrices = {"P1200", "P5000", "P600", "P340"};
         String[] quantities = {"1", "1", "1", "1"};
         Integer[] productImages = {
                 R.drawable.nike_brand,
                 R.drawable.rolex_brand,
-                R.drawable.banana_img,
+                R.drawable.human_brand,
                 R.drawable.shein_brand
         };
 

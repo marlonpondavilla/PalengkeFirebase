@@ -13,5 +13,5 @@
 .externalNativeBuild
 .cxx
 local.properties
-/app/palengkeJSON.json
+/app/google-services.json
 
